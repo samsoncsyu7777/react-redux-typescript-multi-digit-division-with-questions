@@ -55,7 +55,7 @@ interface IMLComponentsOwnProps {
 }
 
 export const HeadingSelect: React.FC<IMLComponentsOwnProps> = ({ selectLabel, selectIndex, setItemIndex, itemsArray }): JSX.Element => {
-  const handleSelect = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }> | undefined): void => {
+  const handleSelect: (event: ChangeEvent<{ name?: string; value: unknown;}> | undefined) => void = (event: ChangeEvent<{ name?: string; value: unknown; }> | undefined): void => {
     let selectedValue: number | unknown = event? event.target.value: selectIndex;
     if (typeof selectedValue === "number") {
       setItemIndex(selectedValue);

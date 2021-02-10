@@ -146,11 +146,11 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     resetDefault();
   }, [topicIndex])
 
-  const closeAlert = () => {
+  const closeAlert: () => void = () => {
     setOpenAlert(false);
   };
 
-  function resetDefault() {
+  function resetDefault(): void {
     setSeverity("error");
     setCompleted(false);
     setInputTypeIndex(0);
@@ -191,7 +191,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     setDivisorArray(tmpZeroArray);
   }
 
-  const resetClick = () => {
+  const resetClick: () => void = () => {
     if (completed) {
       resetDefault();
     } else {
@@ -199,7 +199,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
   };
 
-  function handleDividendInput(value: number) {
+  function handleDividendInput(value: number): void {
     setNestedArrayValue(value, setDividendArray, dividendLineFocusedIndex, dividendPositionFocusedIndex, false, false);
     if (dividendLineFocusedIndex === 0) {
       if (dividendPositionFocusedIndex < dividendEndIndexArray[0]) {
@@ -321,7 +321,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
   }
 
-  function handleDivisorInput(value: number) {
+  function handleDivisorInput(value: number): void {
     setArrayValue(value, divisorArray, setDivisorArray, divisorFocusedIndex, false)
     if (divisorFocusedIndex < divisorArray.length - 1) {
       setDivisorFocusedIndex(divisorFocusedIndex + 1);
@@ -341,7 +341,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
   }
 
-  function handleQuotientInput(value: number) {
+  function handleQuotientInput(value: number): void {
     setArrayValue(value, quotientArray, setQuotientArray, quotientFocusedIndex, false)
     let quotientDiff: number = Math.abs(Math.floor(dividendValue / divisorValue) - value);
     if (quotientDiff > 1
@@ -407,7 +407,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
   }
 
-  function handleProductInput(value: number) {
+  function handleProductInput(value: number): void {
     setNestedArrayValue(value, setProductArray, productLineFocusedIndex, productPositionFocusedIndex, false, false);
     let tmpDivisor: number = (divisorHighlightEndIndex < 0 ? 0 : divisorArray[divisorHighlightEndIndex]);
     let product: number = quotientArray[quotientFocusedIndex] * tmpDivisor + (productPositionFocusedIndex < quotientFocusedIndex ? productCarryArray[productLineFocusedIndex][productPositionFocusedIndex + 1] : 0);
@@ -490,7 +490,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
   }
 
-  const handleKeypadClick = (key: string) => {
+  const handleKeypadClick: (key: string) => void = (key: string) => {
     let value: number = parseInt(key);
     switch (inputTypeIndex) {
       case 0: {
@@ -513,7 +513,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
 
   }
 
-  function setArrayValue(value: number, originalArray: Array<number>, setArray: (value: React.SetStateAction<number[]>) => void, positionIndex: number, popValue: boolean) {
+  function setArrayValue(value: number, originalArray: Array<number>, setArray: (value: React.SetStateAction<number[]>) => void, positionIndex: number, popValue: boolean): void {
     let tmpArray: Array<number> = [...originalArray];
     if (positionIndex >= tmpArray.length) {
       tmpArray.push(value);
@@ -528,7 +528,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     setArray(tmpArray);
   }
 
-  function setNestedArrayValue(value: number, setArray: (value: React.SetStateAction<number[][]>) => void, lineIndex: number, positionIndex: number, pushLine: boolean, popLine: boolean) {
+  function setNestedArrayValue(value: number, setArray: (value: React.SetStateAction<number[][]>) => void, lineIndex: number, positionIndex: number, pushLine: boolean, popLine: boolean): void {
     setArray(prevLines => {
       let tmpPrevLines: number[][] = prevLines.map((line, lIndex) => {
         if (lIndex === lineIndex) {
