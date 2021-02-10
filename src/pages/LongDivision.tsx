@@ -182,7 +182,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     }
     setZeroArray(tmpZeroArray);
     setQuotientArray(tmpZeroArray);
-    var tmpTwoDimenArray = [tmpZeroArray];
+    let tmpTwoDimenArray: number[][] = [tmpZeroArray];
     setDividendArray(tmpTwoDimenArray);
     tmpZeroArray = [];
     for (let i = 0; i < learningToolIndex + 1; i++) {
@@ -213,8 +213,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
         //after subtraction, take next digit and calculate new dividend value
         if (value === dividendArray[0][quotientFocusedIndex + 1]) {
           //correct next digit
-          var tmpDividendValue = 0;
-          var i;
+          let tmpDividendValue: number = 0;
+          let i: number;
           for (i = dividendStartIndexArray[dividendLineFocusedIndex]; i < dividendEndIndexArray[dividendLineFocusedIndex]; i++) {
             tmpDividendValue = tmpDividendValue * 10 + dividendArray[dividendLineFocusedIndex][i];
           }
@@ -237,9 +237,9 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
         }
       } else {
         //check the answer of subtraction
-        var diff = dividendValue - productValue;
-        var diffAtPlace = Math.floor(diff / (10 ** (quotientFocusedIndex - dividendPositionFocusedIndex)));
-        var diffAtDigit = diffAtPlace % 10;
+        let diff: number = dividendValue - productValue;
+        let diffAtPlace: number = Math.floor(diff / (10 ** (quotientFocusedIndex - dividendPositionFocusedIndex)));
+        let diffAtDigit: number = diffAtPlace % 10;
         if (value === diffAtDigit) {
           //correct subtracting this digit
           if (dividendPositionFocusedIndex === dividendStartIndexArray[dividendLineFocusedIndex - 1]) {//productStartIndexArray[productLineFocusedIndex]
@@ -252,8 +252,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
                 setOpenAlert(true);                
               }, timeDelay);
               setTimeout(() => {
-                var tmpStartIndex = dividendPositionFocusedIndex + 1;
-                var i;
+                let tmpStartIndex: number = dividendPositionFocusedIndex + 1;
+                let i: number;
                 for (i = tmpStartIndex; i <= quotientFocusedIndex; i++) {
                   if (dividendArray[dividendLineFocusedIndex][i] === 0) {
                     tmpStartIndex = i + 1;
@@ -331,8 +331,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
       setDividendHighlighted(true);
       setDivisorHighlighted(true);
       setDividendValue(dividendArray[0][0]);
-      var tmpDivisorValue = 0;
-      var i;
+      let tmpDivisorValue: number = 0;
+      let i: number;
       for (i = 0; i < divisorArray.length - 1; i++) {
         tmpDivisorValue = tmpDivisorValue * 10 + divisorArray[i];
       }
@@ -343,20 +343,20 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
 
   function handleQuotientInput(value: number) {
     setArrayValue(value, quotientArray, setQuotientArray, quotientFocusedIndex, false)
-    var quotientDiff = Math.abs(Math.floor(dividendValue / divisorValue) - value);
+    let quotientDiff: number = Math.abs(Math.floor(dividendValue / divisorValue) - value);
     if (quotientDiff > 1
       || quotientDiff === 1
       && (Math.floor(dividendValue / divisorValue) === 0 || value === 0)
     ) {
       //Wrong quotient digit
-      var placeValue = 10 ** (divisorArray.length - 1);
-      var divisorReduced = Math.round(divisorValue / placeValue);
-      var divisorApprox = divisorReduced * placeValue;
-      var dividendReduced = Math.round(dividendValue / placeValue);
-      var divisionOriginal = dividendValue + "÷" + divisorValue;
-      var divisionApprox = dividendValue + "÷" + divisorApprox;
-      var divisionReduced = dividendReduced + "÷" + divisorReduced;
-      var hints = divisionApprox + "≈" + divisionReduced;
+      let placeValue: number = 10 ** (divisorArray.length - 1);
+      let divisorReduced: number = Math.round(divisorValue / placeValue);
+      let divisorApprox: number = divisorReduced * placeValue;
+      let dividendReduced: number = Math.round(dividendValue / placeValue);
+      let divisionOriginal: string = dividendValue + "÷" + divisorValue;
+      let divisionApprox: string = dividendValue + "÷" + divisorApprox;
+      let divisionReduced: string = dividendReduced + "÷" + divisorReduced;
+      let hints: string = divisionApprox + "≈" + divisionReduced;
       setErrorMessage(quotientHintLeft[languageIndex] + divisionOriginal + quotientHintRight[languageIndex] + hints + quotientHintEnd[languageIndex]);
       setSeverity("error");
       setTimeout(() => {
@@ -370,7 +370,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
           setInputTypeIndex(3);
           setNestedArrayValue(0, setProductArray, -1, -1, true, false)
         } else {
-          var tmpDividendValue = dividendValue * 10 + dividendArray[dividendLineFocusedIndex][quotientFocusedIndex + 1];
+          let tmpDividendValue: number = dividendValue * 10 + dividendArray[dividendLineFocusedIndex][quotientFocusedIndex + 1];
           setErrorMessage(zeroAtFront[languageIndex]);
           setSeverity("success");
           setTimeout(() => {
@@ -409,8 +409,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
 
   function handleProductInput(value: number) {
     setNestedArrayValue(value, setProductArray, productLineFocusedIndex, productPositionFocusedIndex, false, false);
-    var tmpDivisor = (divisorHighlightEndIndex < 0 ? 0 : divisorArray[divisorHighlightEndIndex]);
-    var product = quotientArray[quotientFocusedIndex] * tmpDivisor + (productPositionFocusedIndex < quotientFocusedIndex ? productCarryArray[productLineFocusedIndex][productPositionFocusedIndex + 1] : 0);
+    let tmpDivisor: number = (divisorHighlightEndIndex < 0 ? 0 : divisorArray[divisorHighlightEndIndex]);
+    let product: number = quotientArray[quotientFocusedIndex] * tmpDivisor + (productPositionFocusedIndex < quotientFocusedIndex ? productCarryArray[productLineFocusedIndex][productPositionFocusedIndex + 1] : 0);
     //correct product digit
     if (value === product % 10) {
       //dividend start digit
@@ -423,8 +423,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
             setOpenAlert(true);
           }, timeDelay);
           setTimeout(() => {
-            var tmpStartIndex = productPositionFocusedIndex + 1;
-            var i;
+            let tmpStartIndex: number = productPositionFocusedIndex + 1;
+            let i: number;
             for (i = tmpStartIndex; i < quotientFocusedIndex; i++) {
               if (productArray[productLineFocusedIndex][i] === 0) {
                 tmpStartIndex = i + 1;
@@ -436,7 +436,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
           }, timeDelayLarge);
         }
         //product with carry> dividend check
-        var productWhole = product * (10 ** (productEndIndexArray[productLineFocusedIndex] - productPositionFocusedIndex)) + productValue;
+        let productWhole: number = product * (10 ** (productEndIndexArray[productLineFocusedIndex] - productPositionFocusedIndex)) + productValue;
         if (productWhole > dividendValue) {
           //too large quotient results in too large product              
           setErrorMessage(quotientTooLarge[languageIndex]);
@@ -491,7 +491,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
   }
 
   const handleKeypadClick = (key: string) => {
-    var value = parseInt(key);
+    let value: number = parseInt(key);
     switch (inputTypeIndex) {
       case 0: {
         handleDividendInput(value);
@@ -514,7 +514,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
   }
 
   function setArrayValue(value: number, originalArray: Array<number>, setArray: (value: React.SetStateAction<number[]>) => void, positionIndex: number, popValue: boolean) {
-    var tmpArray = [...originalArray];
+    let tmpArray: Array<number> = [...originalArray];
     if (positionIndex >= tmpArray.length) {
       tmpArray.push(value);
     } else {
@@ -530,12 +530,12 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
 
   function setNestedArrayValue(value: number, setArray: (value: React.SetStateAction<number[][]>) => void, lineIndex: number, positionIndex: number, pushLine: boolean, popLine: boolean) {
     setArray(prevLines => {
-      var tmpPrevLines = prevLines.map((line, lIndex) => {
+      let tmpPrevLines: number[][] = prevLines.map((line, lIndex) => {
         if (lIndex === lineIndex) {
           if (pushLine) {
             return zeroArray;
           } else {
-            var tmpLine = line.map((position, pIndex) => {
+            let tmpLine: Array<number> = line.map((position, pIndex) => {
               if (pIndex === positionIndex) {
                 return value;
               } else {

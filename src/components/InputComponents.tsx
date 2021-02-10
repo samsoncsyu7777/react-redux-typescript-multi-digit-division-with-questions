@@ -7,7 +7,7 @@ import {
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import myTheme from "../themes/myTheme";
 
-const inputDimension = 4;
+const inputDimension: number = 4;
 
 const myInputStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,9 +44,9 @@ interface IMyInputOwnProps {
 export const MyInput: React.FC<IMyInputOwnProps> = ({ colorStage, value, superValue }): JSX.Element => {
 
   const classes = myInputStyles();
-  var bgColor;
-  var textColor;
-  var opacityValue;
+  let bgColor: string;
+  let textColor: string;
+  let opacityValue: number;
   switch (colorStage) {
     case "focused": {
       bgColor = myTheme.color.myPink;

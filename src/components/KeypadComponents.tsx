@@ -42,9 +42,9 @@ interface IKeypadComponentsOwnProps {
 }
 
 export const MyKeypad: React.FC<IKeypadComponentsOwnProps> = ({ handleClick }): JSX.Element => {
-  const keypadTexts = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  const keypadColors = [myTheme.color.red, myTheme.color.orange, myTheme.color.yellow, myTheme.color.lime, myTheme.color.green, myTheme.color.cyan, myTheme.color.blue, myTheme.color.purple];
-  var randomIndex = Math.floor(Math.random() * keypadColors.length);
+  const keypadTexts: Array<string> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const keypadColors: Array<string> = [myTheme.color.red, myTheme.color.orange, myTheme.color.yellow, myTheme.color.lime, myTheme.color.green, myTheme.color.cyan, myTheme.color.blue, myTheme.color.purple];
+  let randomIndex: number = Math.floor(Math.random() * keypadColors.length);
 
   const classes = useStyles();
 
