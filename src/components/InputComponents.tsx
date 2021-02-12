@@ -80,8 +80,8 @@ export const MyInput: React.FC<IMyInputOwnProps> = ({ colorStage, value, superVa
       variant="outlined"
       style={{ backgroundColor: bgColor, color: textColor, opacity: opacityValue }}
     >
-      <sup className={classes.superscript}>{superValue === 0 ? "" : superValue}</sup>
-      {value}
+      <sup className={classes.superscript}>{superValue > 0 ? superValue : ""}</sup>
+      {value >= 0 ? value : ""}
     </Button>
   )
 }

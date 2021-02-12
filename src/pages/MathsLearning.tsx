@@ -12,6 +12,8 @@ import {
 } from "./LongDivision";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import myTheme from "../themes/myTheme";
+import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
+import { counterSlice } from "../store/slices";
 import pic1 from "../assets/createWater1.jpg";
 import pic2 from "../assets/fiveBreadTwoFish2.jpg";
 import pic3 from "../assets/prodigal1.jpg";
@@ -112,12 +114,21 @@ interface IAppOwnProps {
 }
 
 const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
-  const [languageIndex, setLanguageIndex] = useState<number>(2);//0:繁體中文
-  const [bibleVersionIndex, setBibleVersionIndex] = useState<number>(0);//0:catholic,1:christian
-  const [topicIndex, setTopicIndex] = useState<number>(1);//1
-  const [learningToolIndex, setLearningToolIndex] = useState<number>(1);
+  //const [languageIndex, setLanguageIndex] = useState<number>(2);//0:繁體中文
+  //const [bibleVersionIndex, setBibleVersionIndex] = useState<number>(0);//0:catholic,1:christian
+  //const [topicIndex, setTopicIndex] = useState<number>(1);//1
+  //const [learningToolIndex, setLearningToolIndex] = useState<number>(1);
   const [scriptureVerseIndex, setScriptureVerseIndex] = useState<number>(0);
   const classes = useStyles();
+
+  const { languageIndex, bibleVersionIndex, topicIndex, learningToolIndex } = useSelector((state: RootStateOrAny) => state.setting);
+
+  const actions = counterSlice.actions;
+  const dispatch = useDispatch();
+  const setLanguageIndex = (value: number) => dispatch(actions.setLanguageIndex(value));
+  const setBibleVersionIndex = (value: number) => dispatch(actions.setBibleVersionIndex(value));
+  const setTopicIndex = (value: number) => dispatch(actions.setTopicIndex(value));
+  const setLearningToolIndex = (value: number) => dispatch(actions.setLearningToolIndex(value));
 
   const numberOfBibleVersions: number = 2;
   const numberOfTopics: number = 4;

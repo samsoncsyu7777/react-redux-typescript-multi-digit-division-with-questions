@@ -3,6 +3,7 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
+import { useSelector, RootStateOrAny } from "react-redux";
 import { AlertSnackbar } from "../components/AlertComponents";
 import { MyFrame } from "../components/HeadingComponents";
 import { MyKeypad } from "../components/KeypadComponents";
@@ -19,7 +20,8 @@ interface ILongDivisionOwnProps {
 }
 
 //×÷👍👍🏻
-export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, topic, learningTool, topicIndex, learningToolIndex }): JSX.Element => {
+export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningTool }): JSX.Element => {
+  const { languageIndex, topicIndex, learningToolIndex } = useSelector((state: RootStateOrAny) => state.setting);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [severity, setSeverity] = useState<"error" | "success" | "info" | "warning">("error");
@@ -178,7 +180,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     setProductCarryArray([]);
     let tmpZeroArray: Array<number> = [];
     for (let i = 0; i < topicIndex + 2; i++) {
-      tmpZeroArray.push(0);
+      tmpZeroArray.push(-1);//
     }
     setZeroArray(tmpZeroArray);
     setQuotientArray(tmpZeroArray);
@@ -186,7 +188,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ languageIndex, t
     setDividendArray(tmpTwoDimenArray);
     tmpZeroArray = [];
     for (let i = 0; i < learningToolIndex + 1; i++) {
-      tmpZeroArray.push(0);
+      tmpZeroArray.push(-1);//
     }
     setDivisorArray(tmpZeroArray);
   }
