@@ -8,6 +8,7 @@ import { AlertSnackbar } from "../components/AlertComponents";
 import { MyFrame } from "../components/HeadingComponents";
 import { MyKeypad } from "../components/KeypadComponents";
 import { MyInput, HorizontalLine, VerticalLine } from "../components/InputComponents";
+import { StageButtons } from "../components/StageComponents";
 import ForwardRoundedIcon from '@material-ui/icons/ForwardRounded';
 import { pagesStyles } from "../themes/styles";
 
@@ -53,8 +54,17 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
   const [productHighlighted, setProductHighlighted] = useState<boolean>(false);
   const [productValue, setProductValue] = useState<number>(0);
   const [productCarryArray, setProductCarryArray] = useState<number[][]>([[]]);
+  const [stageState, setStageState] = useState<number>(-1);
+  const [orderState, setOrderState] = useState<number>(0);
   const timeDelay: number = 200;
   const timeDelayLarge: number = 1500;
+
+  const stageText: Array<string> = [
+    "階段",
+    "阶段",
+    "Stage",
+    "Étape"
+  ];
 
   const topics: Array<string> = [
     "除以",
@@ -138,15 +148,27 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
     " 。",
     " .",
     " ."
-  ]
+  ];
+
+  const zeroDivisorHint: Array<string> = [
+    "除數不可以是0。",
+    "除数不可以是0。",
+    "The divisor cannot be 0.",
+    "Le diviseur ne peut pas être 0."
+  ];
+
+  useEffect(() => {
+    if (stageState === -1 && orderState === 0) {
+      resetDefault();
+    } else {
+      setStageState(-1);
+      setOrderState(0);
+    }
+  }, [learningToolIndex, topicIndex]);
 
   useEffect(() => {
     resetDefault();
-  }, [learningToolIndex]);
-
-  useEffect(() => {
-    resetDefault();
-  }, [topicIndex])
+  }, [stageState, orderState]);
 
   const closeAlert: () => void = () => {
     setOpenAlert(false);
@@ -191,13 +213,25 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
       tmpZeroArray.push(-1);//
     }
     setDivisorArray(tmpZeroArray);
+    if (stageState > -1) {
+      setQuestion(stageState, orderState);
+    }
   }
 
   const resetClick: () => void = () => {
-    if (completed) {
-      resetDefault();
+    if (stageState > -1) {
+      if (orderState < questionsDividend[topicIndex][learningToolIndex][stageState].length - 1) {
+        setOrderState(prevState => prevState + 1);
+      } else {
+        if (stageState < questionsDividend[topicIndex][learningToolIndex].length - 1) {
+          setStageState(prevState => prevState + 1);
+          setOrderState(0);
+        } else {
+          setStageState(-1);
+        }
+      }
     } else {
-
+      resetDefault();
     }
   };
 
@@ -251,7 +285,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
               setErrorMessage(zeroAtFront[languageIndex]);
               setSeverity("success");
               setTimeout(() => {
-                setOpenAlert(true);                
+                setOpenAlert(true);
               }, timeDelay);
               setTimeout(() => {
                 let tmpStartIndex: number = dividendPositionFocusedIndex + 1;
@@ -271,7 +305,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
               setErrorMessage(quotientTooSmall[languageIndex]);
               setSeverity("error");
               setTimeout(() => {
-                setOpenAlert(true);                
+                setOpenAlert(true);
               }, timeDelay);
               setTimeout(() => {
                 setInputTypeIndex(2);
@@ -292,13 +326,13 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
               if (quotientFocusedIndex === dividendArray[0].length - 1) {
                 //completed
                 setProductHighlighted(false);
-                setCompleted(true);
                 setInputTypeIndex(-1);
                 setErrorMessage("👍" + wellDone[languageIndex]);
                 setSeverity("success");
                 setTimeout(() => {
-                  setOpenAlert(true);  
-                }, timeDelay);
+                  setOpenAlert(true);
+                  setCompleted(true);
+                }, timeDelay + 1000);
               } else {
                 //take next digit
                 setDividendPositionFocusedIndex(quotientFocusedIndex + 1);
@@ -339,7 +373,16 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
         tmpDivisorValue = tmpDivisorValue * 10 + divisorArray[i];
       }
       tmpDivisorValue = tmpDivisorValue * 10 + value;
-      setDivisorValue(tmpDivisorValue);
+      if (tmpDivisorValue > 0) {
+        setDivisorValue(tmpDivisorValue);
+      } else {
+        setErrorMessage(zeroDivisorHint[languageIndex]);
+        setSeverity("error");
+        setTimeout(() => {
+          setOpenAlert(true);
+          resetDefault();
+        }, timeDelay);
+      }
     }
   }
 
@@ -366,7 +409,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
       }, timeDelay);
     } else {
       //quotient diff from answer less than or equal to 1
-      if (value === 0 && quotientStartIndex === quotientFocusedIndex) {
+      if (value === 0 && quotientStartIndex === quotientFocusedIndex && quotientFocusedIndex < quotientArray.length - 1) {
         //whole dividend is smaller than the divisor
         if (quotientFocusedIndex === dividendArray[0].length - 1) {
           setInputTypeIndex(3);
@@ -512,7 +555,192 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
         break;
       }
     }
+  }
 
+  const handleStageClick: (stage: number) => void = (stage: number) => {
+    setStageState(stage);
+    setOrderState(0);
+  }
+
+  const questionsDividend: number[][][][][] = [
+    //topicIndex 0: 2-digit dividend
+    [
+      //learningToolIndex 0 : 1-digit divisor
+      [
+        //stage 0
+        [[4, 6], [8, 2], [9, 6]],
+        //stage 1
+        [[3, 5], [8, 2], [9, 5]],
+        //stage 2
+        [[1, 2], [2, 8], [5, 4]],
+        //stage 3
+        [[1, 3], [3, 1], [4, 6]],
+      ],
+      //learningToolIndex 1 : 2-digit divisor
+      [
+        //stage 0
+        [[6, 0], [9, 0], [8, 0]],
+        //stage 1
+        [[2, 2], [3, 6], [9, 6]],
+        //stage 2
+        [[2, 9], [6, 5], [8, 9]],
+        //stage 3
+        [[5, 2], [8, 0], [8, 7]],
+        //stage 4
+        [[5, 3], [8, 2], [9, 2]],
+      ],
+      //learningToolIndex 2 : 3-digit divisor
+      [
+        //stage 0
+        [[6, 7], [8, 3], [5, 9]],
+      ],
+    ],
+    //topicIndex 1: 3-digit dividend
+    [
+      //learningToolIndex 0 : 1-digit divisor
+      [
+        //stage 0
+        [[4, 6, 2], [9, 3, 9], [8, 4, 4]],
+        //stage 1
+        [[4, 3, 9], [7, 2, 4], [9, 9, 5]],
+        //stage 2
+        [[6, 0, 8], [8, 0, 4], [3, 0, 9]],
+        //stage 3
+        [[1, 8, 9], [2, 4, 8], [4, 8, 6]],
+        //stage 4
+        [[2, 5, 1], [4, 9, 9], [7, 6, 2]],
+      ],
+      //learningToolIndex 1 : 2-digit divisor
+      [
+        //stage 0
+        [[9, 3, 0], [4, 8, 0], [3, 4, 0]],
+        //stage 1
+        [[5, 0, 8], [5, 6, 7], [7, 7, 1]],
+        //stage 2
+        [[5, 6, 7], [9, 6, 6], [6, 0, 8]],
+        //stage 3
+        [[8, 1, 3], [9, 1, 9], [7, 0, 2]],
+        //stage 4
+        [[1, 2, 0], [3, 5, 0], [4, 2, 0]],
+        //stage 5
+        [[1, 8, 3], [2, 0, 8], [4, 9, 8]],
+        //stage 6
+        [[3, 0, 0], [5, 6, 4], [4, 1, 9]],
+      ],
+      //learningToolIndex 2 : 3-digit divisor
+      [
+        //stage 0
+        [[9, 3, 0], [4, 8, 3], [3, 4, 0]],
+      ],
+    ],
+    //topicIndex 2: 4-digit dividend
+    [
+      [], [], []
+    ],
+    //topicIndex 3: 5-digit dividend
+    [
+      [], [], []
+    ],
+  ];
+
+  const questionsDivisor: number[][][][][] = [
+    //topicIndex 0: 2-digit dividend
+    [
+      //learningToolIndex 0 : 1-digit divisor
+      [
+        //stage 0
+        [[2], [2], [3]],
+        //stage 1
+        [[2], [3], [7]],
+        //stage 2
+        [[4], [7], [9]],
+        //stage 3
+        [[2], [4], [7]],
+      ],
+      //learningToolIndex 1 : 2-digit divisor
+      [
+        //stage 0
+        [[1, 0], [3, 0], [4, 0]],
+        //stage 1
+        [[1, 1], [1, 2], [3, 2]],
+        //stage 2
+        [[1, 2], [3, 1], [4, 3]],
+        //stage 3
+        [[1, 3], [1, 6], [2, 9]],
+        //stage 4
+        [[1, 5], [3, 7], [4, 5]],
+      ],
+      //learningToolIndex 2 : 3-digit divisor
+      [
+        //stage 0
+        [[1, 1, 1], [4, 6, 3], [2, 9, 1]],
+      ],
+    ],
+    //topicIndex 1: 3-digit dividend
+    [
+      //learningToolIndex 0 : 1-digit divisor
+      [
+        //stage 0
+        [[2], [3], [4]],
+        //stage 1
+        [[3], [5], [8]],
+        //stage 2
+        [[2], [4], [3]],
+        //stage 3
+        [[9], [8], [6]],
+        //stage 4
+        [[6], [5], [9]],
+      ],
+      //learningToolIndex 1 : 2-digit divisor
+      [
+        //stage 0
+        [[3, 1], [2, 4], [1, 7]],
+        //stage 1
+        [[2, 5], [1, 4], [3, 8]],
+        //stage 2
+        [[2, 7], [4, 6], [1, 9]],
+        //stage 3
+        [[3, 8], [2, 9], [1, 7]],
+        //stage 4
+        [[6, 0], [5, 0], [7, 0]],
+        //stage 5
+        [[6, 1], [5, 2], [8, 3]],
+        //stage 6
+        [[3, 8], [7, 7], [4, 9]],
+      ],
+      //learningToolIndex 2 : 3-digit divisor
+      [
+        //stage 0
+        [[3, 1, 0], [1, 6, 1], [2, 9, 5]],
+      ],
+    ],
+    //topicIndex 2: 4-digit dividend
+    [
+      [], [], []
+    ],
+    //topicIndex 3: 5-digit dividend
+    [
+      [], [], []
+    ],
+  ];
+
+  const setQuestion: (stage: number, order: number) => void = (stage: number, order: number) => {
+
+    setDividendArray([questionsDividend[topicIndex][learningToolIndex][stage][order]]);
+    setDivisorArray(questionsDivisor[topicIndex][learningToolIndex][stage][order]);
+    let tmpDividendValue: number = questionsDividend[topicIndex][learningToolIndex][stage][order][0];
+    let tmpDivisor: Array<number> = questionsDivisor[topicIndex][learningToolIndex][stage][order];
+    setInputTypeIndex(2);
+    setQuotientFocusedIndex(0);
+    setDividendHighlighted(true);
+    setDivisorHighlighted(true);
+    setDividendValue(tmpDividendValue);
+    let tmpDivisorValue: number = 0;
+    let i: number;
+    for (i = 0; i < tmpDivisor.length; i++) {
+      tmpDivisorValue = tmpDivisorValue * 10 + tmpDivisor[i];
+    }
+    setDivisorValue(tmpDivisorValue);
   }
 
   function setArrayValue(value: number, originalArray: Array<number>, setArray: (value: React.SetStateAction<number[]>) => void, positionIndex: number, popValue: boolean): void {
@@ -563,6 +791,12 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({ topic, learningT
   const classes = pagesStyles();
   return (
     <MyFrame topic={topic + topics[languageIndex] + learningTool} learningTool={""}>
+      <Grid className={classes.spaceGrid} />
+      {questionsDivisor[topicIndex][learningToolIndex].length > 0 && <StageButtons
+        stageText={stageText[languageIndex] + "："}
+        stages={Object.keys(questionsDivisor[topicIndex][learningToolIndex])}
+        handleStageClick={handleStageClick}
+      />}
       <Grid className={classes.spaceGrid} />
       <Grid className={classes.centerRow}>
         <Grid className={classes.formulaColumn}>

@@ -6,8 +6,8 @@ export const counterSlice = createSlice({
   initialState: {
     languageIndex: 2,
     bibleVersionIndex: 0,
-    topicIndex: 1,
-    learningToolIndex: 1,
+    topicIndex: 0,
+    learningToolIndex: 0,
   },
 
   reducers: {

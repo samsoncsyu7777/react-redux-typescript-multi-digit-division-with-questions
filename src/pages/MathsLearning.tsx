@@ -114,10 +114,6 @@ interface IAppOwnProps {
 }
 
 const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
-  //const [languageIndex, setLanguageIndex] = useState<number>(2);//0:繁體中文
-  //const [bibleVersionIndex, setBibleVersionIndex] = useState<number>(0);//0:catholic,1:christian
-  //const [topicIndex, setTopicIndex] = useState<number>(1);//1
-  //const [learningToolIndex, setLearningToolIndex] = useState<number>(1);
   const [scriptureVerseIndex, setScriptureVerseIndex] = useState<number>(0);
   const classes = useStyles();
 
@@ -195,12 +191,6 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
     "Turn on the notification, prompts will be displayed during the calculation.",
     "Activez la notification, des invites seront affichées pendant le calcul."
   ];
-  const applicationHint: Array<string> = [
-    "使用方法：先按空格，再輸入數字或運算符號。",
-    "使用方法：先按空格，再输入数字或运算符号。",
-    "How to use: Press the space first, then enter a number or an operator.",
-    "Comment utiliser: appuyez d'abord sur l'espace, puis entrez un nombre ou un opérateur."
-  ];
 
   useEffect(() => {
     const queryString: string = props.location?.search ? props.location.search : "";
@@ -246,14 +236,12 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
           itemsArray={learningTools.slice((languageIndex * numberOfTopics + topicIndex) * numberOfLearningTools, (languageIndex * numberOfTopics + topicIndex + 1) * numberOfLearningTools)}
         />
       </Grid>
-
       <Grid className={classes.scriptureVerseRow} >
         <Grid className={classes.scriptureVerseBorder} >
           <img className={classes.scriptureImage} src={scriptureImages[scriptureVerseIndex]} />
           <Typography className={classes.scriptureVerse}>{scriptureVerses[(languageIndex * numberOfBibleVersions + bibleVersionIndex) * numberOfScriptureVerses + scriptureVerseIndex]}</Typography>
         </Grid>
       </Grid>
-
       <LongDivision
         languageIndex={languageIndex}
         topic={topics[languageIndex * numberOfTopics + topicIndex]}
@@ -261,13 +249,9 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
         topicIndex={topicIndex}
         learningToolIndex={learningToolIndex}
       />
-
       <Grid className={classes.prayerRow}>
         <img className={classes.prayerImage} src={prayerImage} />
         <Typography className={classes.prayerText}>{prayers[languageIndex]}</Typography>
-      </Grid>
-      <Grid className={classes.prayerRow}>
-        <Typography className={classes.commonText}>{applicationHint[languageIndex]}</Typography>
       </Grid>
       <Grid className={classes.prayerRow}>
         <Typography className={classes.commonText}>{noticificationText[languageIndex]}</Typography>
