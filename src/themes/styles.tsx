@@ -1,4 +1,4 @@
-import { makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 export const pagesStyles = makeStyles((theme) => ({
   centerRow: {
@@ -28,7 +28,7 @@ export const pagesStyles = makeStyles((theme) => ({
     width: "75vw",
     [theme.breakpoints.down("sm")]: {
       width: "90vw",
-    }
+    },
   },
   verticalCenterRow: {
     display: "flex",
@@ -39,7 +39,7 @@ export const pagesStyles = makeStyles((theme) => ({
   },
   commonText: {
     fontSize: "2vw",
-    margin: '0.5vw',
+    margin: "0.5vw",
     [theme.breakpoints.down("sm")]: {
       fontSize: "4vw",
     },

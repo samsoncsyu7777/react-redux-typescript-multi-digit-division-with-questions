@@ -1,5 +1,4 @@
-
-const myTheme = {
+const myTheme: { [key: string]: { [key: string]: string } } = {
   color: {
     myBlack: "#111111",
     myRed: "#AA0000",
@@ -22,7 +21,8 @@ const myTheme = {
     blue: "#0088FF",
     purple: "#B400FF",
     skyGradient: "linear-gradient(to top, #E990F4, #FAE9FF)",
-    conicGradient: "linear-gradient(to top right, red, orange, yellow, lime, green, lime, yellow, orange, red ) 1",
+    conicGradient:
+      "linear-gradient(to top right, red, orange, yellow, lime, green, lime, yellow, orange, red ) 1",
   },
 };
 

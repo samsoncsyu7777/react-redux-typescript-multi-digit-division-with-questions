@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-} from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import myTheme from "../themes/myTheme";
 
@@ -33,7 +29,8 @@ const myInputStyles = makeStyles((theme: Theme) =>
         lineHeight: inputDimension * 2 * 0.25 + "vw",
       },
     },
-  }));
+  })
+);
 
 interface IMyInputOwnProps {
   colorStage: string;
@@ -41,8 +38,11 @@ interface IMyInputOwnProps {
   superValue: number;
 }
 
-export const MyInput: React.FC<IMyInputOwnProps> = ({ colorStage, value, superValue }): JSX.Element => {
-
+export const MyInput: React.FC<IMyInputOwnProps> = ({
+  colorStage,
+  value,
+  superValue,
+}): JSX.Element => {
   const classes = myInputStyles();
   let bgColor: string;
   let textColor: string;
@@ -53,7 +53,7 @@ export const MyInput: React.FC<IMyInputOwnProps> = ({ colorStage, value, superVa
       textColor = myTheme.color.myRed;
       opacityValue = 1;
       break;
-    };
+    }
     case "highlighted": {
       bgColor = myTheme.color.myYellow;
       textColor = myTheme.color.myBlue;
@@ -78,13 +78,19 @@ export const MyInput: React.FC<IMyInputOwnProps> = ({ colorStage, value, superVa
     <Button
       className={classes.integerInput}
       variant="outlined"
-      style={{ backgroundColor: bgColor, color: textColor, opacity: opacityValue }}
+      style={{
+        backgroundColor: bgColor,
+        color: textColor,
+        opacity: opacityValue,
+      }}
     >
-      <sup className={classes.superscript}>{superValue > 0 ? superValue : ""}</sup>
+      <sup className={classes.superscript}>
+        {superValue > 0 ? superValue : ""}
+      </sup>
       {value >= 0 ? value : ""}
     </Button>
-  )
-}
+  );
+};
 
 const horizontalLineStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -99,29 +105,32 @@ const horizontalLineStyles = makeStyles((theme: Theme) =>
         height: "0.2vw",
       },
     },
-  }));
+  })
+);
 
 interface IHorizontalLineOwnProps {
   lengthArray: Array<number>;
 }
 
-export const HorizontalLine: React.FC<IHorizontalLineOwnProps> = ({ lengthArray }): JSX.Element => {
+export const HorizontalLine: React.FC<IHorizontalLineOwnProps> = ({
+  lengthArray,
+}): JSX.Element => {
   const classes = horizontalLineStyles();
 
   return (
     <Grid className={classes.row}>
-      {
-        lengthArray.map((item, index) => {
-          return <Box
+      {lengthArray.map((item, index) => {
+        return (
+          <Box
             key={index}
             borderBottom={3}
             className={classes.oneDigitLength}
           />
-        })
-      }
+        );
+      })}
     </Grid>
-  )
-}
+  );
+};
 
 const verticalLineStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -133,15 +142,11 @@ const verticalLineStyles = makeStyles((theme: Theme) =>
         height: inputDimension * 2 + "vw",
       },
     },
-  }));
+  })
+);
 
 export const VerticalLine: React.FC = (): JSX.Element => {
   const classes = verticalLineStyles();
 
-  return (
-    <Box
-      borderRight={3}
-      className={classes.oneDigitHeight}
-    />
-  )
-}
+  return <Box borderRight={3} className={classes.oneDigitHeight} />;
+};
