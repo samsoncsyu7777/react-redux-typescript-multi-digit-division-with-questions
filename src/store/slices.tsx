@@ -4,7 +4,7 @@ export const counterSlice = createSlice({
   name: "setting",
 
   initialState: {
-    languageIndex: 2,
+    languageIndex: 0,
     bibleVersionIndex: 0,
     topicIndex: 0,
     learningToolIndex: 0,

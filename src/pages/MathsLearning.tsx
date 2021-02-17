@@ -149,8 +149,8 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
       ? props.location.search
       : "";
     const urlParams: URLSearchParams = new URLSearchParams(queryString);
-    const lang: string = urlParams.get("lang") || "2";
-    const langIndex: number = parseInt(lang) || 2;
+    const lang: string = urlParams.get("lang") || "0";
+    const langIndex: number = parseInt(lang) || 0;
     if (langIndex >= 0 && langIndex < 4) {
       setLanguageIndex(langIndex);
     }
@@ -206,6 +206,7 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
           <img
             className={classes.scriptureImage}
             src={scriptureImages[scriptureVerseIndex]}
+            alt="Bible Story Image"
           />
           <Typography className={classes.scriptureVerse}>
             {
@@ -232,7 +233,7 @@ const MathsLearning: React.FC<IAppOwnProps> = (props): JSX.Element => {
         learningToolIndex={learningToolIndex}
       />
       <Grid className={classes.prayerRow}>
-        <img className={classes.prayerImage} src={prayerImage} />
+        <img className={classes.prayerImage} src={prayerImage} alt="Prayer Image"/>
         <Typography className={classes.prayerText}>
           {prayers[languageIndex]}
         </Typography>

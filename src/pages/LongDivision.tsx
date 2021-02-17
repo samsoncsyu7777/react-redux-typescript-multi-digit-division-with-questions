@@ -94,7 +94,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
   const [productHighlighted, setProductHighlighted] = useState<boolean>(false);
   const [productValue, setProductValue] = useState<number>(0);
   const [productCarryArray, setProductCarryArray] = useState<number[][]>([[]]);
-  const [stageState, setStageState] = useState<number>(-1);
+  const [stageState, setStageState] = useState<number>(0);
   const [orderState, setOrderState] = useState<number>(0);
   const timeDelay: number = 200;
   const timeDelayLarge: number = 1500;
@@ -114,16 +114,26 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
     quotientHintRight,
     quotientHintEnd,
     zeroDivisorHint,
+    manual,
   } = constants;
 
   const { questionsDividend, questionsDivisor } = questions;
 
   useEffect(() => {
-    if (stageState === -1 && orderState === 0) {
-      resetDefault();
+    if (questionsDividend[topicIndex][learningToolIndex].length === 0) {
+        if (stageState === -1 && orderState === 0) {
+          resetDefault();
+        } else {
+          setStageState(-1);
+          setOrderState(0);
+        }
     } else {
-      setStageState(-1);
-      setOrderState(0);
+      if (stageState === 0 && orderState === 0) {
+        resetDefault();
+      } else {
+        setStageState(0);
+        setOrderState(0);
+      }
     }
   }, [learningToolIndex, topicIndex]);
 
@@ -459,10 +469,10 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
       let hints: string = divisionApprox + "≈" + divisionReduced;
       setErrorMessage(
         quotientHintLeft[languageIndex] +
-          divisionOriginal +
-          quotientHintRight[languageIndex] +
-          hints +
-          quotientHintEnd[languageIndex]
+        divisionOriginal +
+        quotientHintRight[languageIndex] +
+        hints +
+        quotientHintEnd[languageIndex]
       );
       setSeverity("error");
       setTimeout(() => {
@@ -546,8 +556,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
       quotientArray[quotientFocusedIndex] * tmpDivisor +
       (productPositionFocusedIndex < quotientFocusedIndex
         ? productCarryArray[productLineFocusedIndex][
-            productPositionFocusedIndex + 1
-          ]
+        productPositionFocusedIndex + 1
+        ]
         : 0);
     //correct product digit
     if (value === product % 10) {
@@ -585,9 +595,9 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
         //product with carry> dividend check
         let productWhole: number =
           product *
-            10 **
-              (productEndIndexArray[productLineFocusedIndex] -
-                productPositionFocusedIndex) +
+          10 **
+          (productEndIndexArray[productLineFocusedIndex] -
+            productPositionFocusedIndex) +
           productValue;
         if (productWhole > dividendValue) {
           //too large quotient results in too large product
@@ -675,10 +685,10 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
         setDivisorHighlightEndIndex(divisorHighlightEndIndex - 1);
         setProductValue(
           value *
-            10 **
-              (productEndIndexArray[productLineFocusedIndex] -
-                productPositionFocusedIndex) +
-            productValue
+          10 **
+          (productEndIndexArray[productLineFocusedIndex] -
+            productPositionFocusedIndex) +
+          productValue
         );
       }
     } else {
@@ -824,6 +834,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
           stageText={stageText[languageIndex] + "："}
           stages={Object.keys(questionsDivisor[topicIndex][learningToolIndex])}
           handleStageClick={handleStageClick}
+          stageState={stageState}
+          manual={manual[languageIndex]}
         />
       )}
       <Grid className={classes.spaceGrid} />
@@ -840,10 +852,10 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                     index > quotientFocusedIndex || index < quotientStartIndex
                       ? "invisible"
                       : inputTypeIndex === 2 && index === quotientFocusedIndex
-                      ? "focused"
-                      : quotientHighlighted && index === quotientFocusedIndex
-                      ? "highlighted"
-                      : "usual"
+                        ? "focused"
+                        : quotientHighlighted && index === quotientFocusedIndex
+                          ? "highlighted"
+                          : "usual"
                   }
                 />
               );
@@ -865,8 +877,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                       : divisorHighlighted &&
                         index >= divisorHighlightStartIndex &&
                         index <= divisorHighlightEndIndex
-                      ? "highlighted"
-                      : "usual"
+                        ? "highlighted"
+                        : "usual"
                   }
                 />
               );
@@ -882,8 +894,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                       superValue={0}
                       colorStage={
                         inputTypeIndex === 0 &&
-                        dividendLineFocusedIndex === 0 &&
-                        dividendPositionFocusedIndex === index
+                          dividendLineFocusedIndex === 0 &&
+                          dividendPositionFocusedIndex === index
                           ? "focused"
                           : dividendHighlighted &&
                             index <= quotientFocusedIndex &&
@@ -891,8 +903,8 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                               dividendLineFocusedIndex === 0) ||
                               (inputTypeIndex === 0 &&
                                 dividendLineFocusedIndex === 1))
-                          ? "highlighted"
-                          : "usual"
+                            ? "highlighted"
+                            : "usual"
                       }
                     />
                   );
@@ -913,16 +925,16 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                             colorStage={
                               positionIndex <
                                 productStartIndexArray[lineIndex] ||
-                              positionIndex > productEndIndexArray[lineIndex]
+                                positionIndex > productEndIndexArray[lineIndex]
                                 ? "invisible"
                                 : inputTypeIndex === 3 &&
                                   productLineFocusedIndex === lineIndex &&
                                   productPositionFocusedIndex === positionIndex
-                                ? "focused"
-                                : productHighlighted &&
-                                  productLineFocusedIndex === lineIndex
-                                ? "highlighted"
-                                : "usual"
+                                  ? "focused"
+                                  : productHighlighted &&
+                                    productLineFocusedIndex === lineIndex
+                                    ? "highlighted"
+                                    : "usual"
                             }
                           />
                         );
@@ -945,24 +957,24 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
                                 colorStage={
                                   positionIndex <
                                     dividendStartIndexArray[lineIndex + 1] ||
-                                  positionIndex >
+                                    positionIndex >
                                     dividendEndIndexArray[lineIndex + 1]
                                     ? "invisible"
                                     : inputTypeIndex === 0 &&
                                       dividendLineFocusedIndex ===
-                                        lineIndex + 1 &&
+                                      lineIndex + 1 &&
                                       dividendPositionFocusedIndex ===
-                                        positionIndex
-                                    ? "focused"
-                                    : dividendHighlighted &&
-                                      ((dividendLineFocusedIndex ===
-                                        lineIndex + 1 &&
-                                        inputTypeIndex === 2) ||
-                                        (dividendLineFocusedIndex - 2 ===
-                                          lineIndex &&
-                                          inputTypeIndex === 0))
-                                    ? "highlighted"
-                                    : "usual"
+                                      positionIndex
+                                      ? "focused"
+                                      : dividendHighlighted &&
+                                        ((dividendLineFocusedIndex ===
+                                          lineIndex + 1 &&
+                                          inputTypeIndex === 2) ||
+                                          (dividendLineFocusedIndex - 2 ===
+                                            lineIndex &&
+                                            inputTypeIndex === 0))
+                                        ? "highlighted"
+                                        : "usual"
                                 }
                               />
                             );

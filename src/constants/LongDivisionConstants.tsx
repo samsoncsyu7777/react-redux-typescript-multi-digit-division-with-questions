@@ -68,6 +68,9 @@ const constants: { [key: string]: string[] } = {
     "The divisor cannot be 0.",
     "Le diviseur ne peut pas être 0.",
   ],
+  manual: [
+    "自擬題目", "自拟题目", "Personal Task", "Tâche personnelle",
+  ],
 };
 
 export default constants;
