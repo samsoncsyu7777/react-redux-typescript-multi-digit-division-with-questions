@@ -135,7 +135,7 @@ export const LongDivision: React.FC<ILongDivisionOwnProps> = ({
         setOrderState(0);
       }
     }
-  }, [learningToolIndex, topicIndex]);
+  }, [topicIndex, learningToolIndex]);
 
   useEffect(() => {
     resetDefault();
